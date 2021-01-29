@@ -1,0 +1,36 @@
+CREATE DATABASE easylink;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS users (
+  id UUID NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
+  name VARCHAR NOT NULL,
+  email VARCHAR NOT NULL UNIQUE,
+  password VARCHAR NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS categories (
+  id UUID NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
+  name VARCHAR NOT NULL UNIQUE,
+  user_id UUID,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  PRIMARY KEY(id),
+  FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS links (
+  id UUID NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
+  title VARCHAR NOT NULL,
+  url VARCHAR NOT NULL,
+  category_id UUID,
+  user_id UUID,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  PRIMARY KEY(id),
+  FOREIGN KEY(category_id) REFERENCES categories(id),
+  FOREIGN KEY(user_id) REFERENCES users(id)
+);
