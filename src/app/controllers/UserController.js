@@ -32,6 +32,34 @@ class UserController {
 
     response.json(user);
   }
+
+  async update(request, response) {
+    const { id } = request.params;
+    const { name, email } = request.body;
+
+    const userExists = await UserRepository.findById(id);
+    if (!userExists) {
+      return response.status(404).json({ error: 'User not found' });
+    }
+
+    const schema = yup.object().shape({
+      name: yup.string().required(),
+      email: yup.string().email().required(),
+    });
+
+    if (!await schema.isValid({ name, email })) {
+      return response.status(400).json({ error: 'Validation fails' });
+    }
+
+    const userByEmail = await UserRepository.findByEmail(email);
+    if (userByEmail && userByEmail.id !== id) {
+      return response.status(400).json({ error: 'This email already in use' });
+    }
+
+    const user = await UserRepository.update(id, { name, email });
+
+    response.json(user);
+  }
 }
 
 module.exports = new UserController();
