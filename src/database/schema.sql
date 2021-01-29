@@ -1,0 +1,3 @@
+CREATE DATABASE easylink;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
