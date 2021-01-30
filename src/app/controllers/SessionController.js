@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const yup = require('yup');
 
 const UserRepository = require('../repositories/UserRepository');
-const UserDto = require('../dto/UserDto');
 
 class SessionController {
   async authenticate(request, response) {
@@ -32,8 +31,10 @@ class SessionController {
       id: user.id,
     }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
+    delete user.password;
+
     response.json({
-      user: UserDto.render(user),
+      user,
       token,
     });
   }
