@@ -2,6 +2,7 @@ const { Router } = require('express');
 
 const SessionController = require('./app/controllers/SessionController');
 const UserController = require('./app/controllers/UserController');
+const CategoryController = require('./app/controllers/CategoryController');
 
 const authMiddleware = require('./app/middlewares/authMiddleware');
 
@@ -11,5 +12,7 @@ router.post('/users', UserController.store);
 router.put('/users/:id', authMiddleware, UserController.update);
 
 router.post('/sessions', SessionController.authenticate);
+
+router.post('/categories', CategoryController.store);
 
 module.exports = router;
