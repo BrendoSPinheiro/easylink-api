@@ -1,6 +1,14 @@
 const db = require('../../database');
 
 class CategoryRepository {
+  async findAll() {
+    const rows = await db.query(`
+      SELECT * FROM categories ORDER BY name
+    `);
+
+    return rows;
+  }
+
   async findByName(name) {
     const [row] = await db.query(`
       SELECT * FROM categories
