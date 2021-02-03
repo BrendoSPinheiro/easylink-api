@@ -13,6 +13,6 @@ router.put('/users/:id', authMiddleware, UserController.update);
 
 router.post('/sessions', SessionController.authenticate);
 
-router.post('/categories', CategoryController.store);
+router.post('/categories', authMiddleware, CategoryController.store);
 
 module.exports = router;
