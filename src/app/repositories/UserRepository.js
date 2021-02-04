@@ -13,7 +13,7 @@ class UserRepository {
 
   async findByEmail(email) {
     const [row] = await db.query(`
-      SELECT id, name, email, created_at, updated_at
+      SELECT *
       FROM users
       WHERE email = $1
     `, [email]);

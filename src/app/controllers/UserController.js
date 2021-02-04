@@ -22,13 +22,13 @@ class UserController {
       return response.status(400).json({ error: 'This email already in use' });
     }
 
-    const data = {
+    const newUserData = {
       name,
       email,
       password: await bcrypt.hash(password, 8),
     };
 
-    const user = await UserRepository.create(data);
+    const user = await UserRepository.create(newUserData);
 
     response.json(user);
   }
