@@ -1,11 +1,12 @@
 const db = require('../../database');
 
 class CategoryRepository {
-  async findAll() {
+  async findAllByUserId(userId) {
     const rows = await db.query(`
-      SELECT * FROM categories ORDER BY name
-    `);
-
+      SELECT * FROM categories
+      WHERE user_id = $1
+      ORDER BY name
+    `, [userId]);
     return rows;
   }
 
@@ -18,11 +19,11 @@ class CategoryRepository {
     return row;
   }
 
-  async findByName(name) {
+  async findByNameAndUserId(name, userId) {
     const [row] = await db.query(`
       SELECT * FROM categories
-      WHERE name = $1
-    `, [name]);
+      WHERE name = $1 AND user_id = $2
+    `, [name, userId]);
 
     return row;
   }
