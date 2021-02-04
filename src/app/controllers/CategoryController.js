@@ -4,7 +4,9 @@ const CategoryRepository = require('../repositories/CategoryRepository');
 
 class CategoryController {
   async index(request, response) {
-    const categories = await CategoryRepository.findAll();
+    const { userId } = request;
+
+    const categories = await CategoryRepository.findAllByUserId(userId);
 
     response.json(categories);
   }
@@ -32,7 +34,9 @@ class CategoryController {
       return response.status(400).json({ error: 'Validation fails' });
     }
 
-    const categoryExists = await CategoryRepository.findByName(name);
+    const categoryExists = await CategoryRepository.findByNameAndUserId(
+      name, userId,
+    );
     if (categoryExists) {
       return response.status(400).json({ error: 'This name already in use' });
     }
