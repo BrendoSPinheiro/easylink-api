@@ -85,6 +85,26 @@ class CategoryController {
 
     response.json(category);
   }
+
+  async delete(request, response) {
+    const { id } = request.params;
+    const { userId } = request;
+
+    const categoryExists = await CategoryRepository.findById(id);
+    if (!categoryExists) {
+      return response.status(404).json({ error: 'Category not found' });
+    }
+
+    if (categoryExists && categoryExists.user_id !== userId) {
+      return response.status(400).json({
+        error: 'This category belongs to another user',
+      });
+    }
+
+    await CategoryRepository.delete(id);
+
+    response.sendStatus(204);
+  }
 }
 
 module.exports = new CategoryController();
