@@ -3,6 +3,7 @@ const { Router } = require('express');
 const SessionController = require('./app/controllers/SessionController');
 const UserController = require('./app/controllers/UserController');
 const CategoryController = require('./app/controllers/CategoryController');
+const LinkController = require('./app/controllers/LinkController');
 
 const authMiddleware = require('./app/middlewares/authMiddleware');
 
@@ -19,5 +20,7 @@ router.get('/categories/:id', CategoryController.show);
 router.post('/categories', CategoryController.store);
 router.put('/categories/:id', CategoryController.update);
 router.delete('/categories/:id', CategoryController.delete);
+
+router.post('/links', LinkController.store);
 
 module.exports = router;
