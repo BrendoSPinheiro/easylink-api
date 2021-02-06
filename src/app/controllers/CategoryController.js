@@ -37,7 +37,7 @@ class CategoryController {
     const categoryExists = await CategoryRepository.findByNameAndUserId(
       name, userId,
     );
-    if (categoryExists) {
+    if (categoryExists && categoryExists.user_id === userId) {
       return response.status(400).json({ error: 'This name already in use' });
     }
 
