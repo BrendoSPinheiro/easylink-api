@@ -15,7 +15,7 @@ class LinkController {
   async show(request, response) {
     const { id } = request.params;
 
-    const link = await LinkRepository.findByUrlAndUserId(id);
+    const link = await LinkRepository.findById(id);
     if (!link) {
       return response.status(404).json({ error: 'Link not found' });
     }
