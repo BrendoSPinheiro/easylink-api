@@ -34,12 +34,19 @@ class UserController {
   }
 
   async update(request, response) {
+    const { userId } = request;
     const { id } = request.params;
     const { name, email } = request.body;
 
     const userExists = await UserRepository.findById(id);
     if (!userExists) {
       return response.status(404).json({ error: 'User not found' });
+    }
+
+    if (userExists.id !== userId) {
+      return response.status(400).json({
+        error: 'you are not authorized to update this user',
+      });
     }
 
     const schema = yup.object().shape({
