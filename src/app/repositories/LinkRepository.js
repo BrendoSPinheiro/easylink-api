@@ -1,6 +1,17 @@
 const db = require('../../database');
 
 class LinkRepository {
+  async findAllByUserId(userId, orderBy = 'ASC') {
+    const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+    const rows = await db.query(`
+      SELECT * FROM links
+      WHERE user_id = $1
+      ORDER BY title ${direction}
+    `, [userId]);
+
+    return rows;
+  }
+
   async findByUrlAndUserId(url, userId) {
     const [row] = await db.query(`
       SELECT * FROM links
