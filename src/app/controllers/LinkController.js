@@ -12,6 +12,17 @@ class LinkController {
     response.json(links);
   }
 
+  async show(request, response) {
+    const { id } = request.params;
+
+    const link = await LinkRepository.findByUrlAndUserId(id);
+    if (!link) {
+      return response.status(404).json({ error: 'Link not found' });
+    }
+
+    response.json(link);
+  }
+
   async store(request, response) {
     const { userId } = request;
     let { title } = request.body;
