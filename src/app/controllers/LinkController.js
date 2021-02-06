@@ -3,6 +3,14 @@ const yup = require('yup');
 const LinkRepository = require('../repositories/LinkRepository');
 
 class LinkController {
+  async index(request, response) {
+    const { userId } = request;
+
+    const links = await LinkRepository.findAllByUserId(userId);
+
+    response.json(links);
+  }
+
   async store(request, response) {
     const { userId } = request;
     let { title } = request.body;
