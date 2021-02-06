@@ -21,6 +21,7 @@ router.post('/categories', CategoryController.store);
 router.put('/categories/:id', CategoryController.update);
 router.delete('/categories/:id', CategoryController.delete);
 
+router.get('/links', LinkController.index);
 router.post('/links', LinkController.store);
 
 module.exports = router;
