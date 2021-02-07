@@ -39,6 +39,17 @@ class LinkRepository {
 
     return row;
   }
+
+  async update(id, { title, url, category_id }) {
+    const [row] = await db.query(`
+      UPDATE links
+      SET title = $1, url = $2, category_id = $3
+      WHERE id = $4
+      RETURNING *
+    `, [title, url, category_id, id]);
+
+    return row;
+  }
 }
 
 module.exports = new LinkRepository();

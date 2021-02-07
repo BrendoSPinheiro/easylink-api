@@ -60,6 +60,43 @@ class LinkController {
 
     response.json(link);
   }
+
+  async update(request, response) {
+    const { userId } = request;
+    const { id } = request.params;
+    const { title, url, category_id } = request.body;
+
+    const linkExists = await LinkRepository.findById(id);
+    if (!linkExists) {
+      return response.status(404).json({ error: 'Link not found' });
+    }
+    if (linkExists.user_id !== userId) {
+      return response.status(400).json({
+        error: 'This link belongs to another user',
+      });
+    }
+
+    const schema = yup.object().shape({
+      title: yup.string().required(),
+      url: yup.string().url().required(),
+      category_id: yup.string().uuid(),
+    });
+
+    if (!await schema.isValid({ title, url, category_id })) {
+      return response.status(400).json({ error: 'Validation fails' });
+    }
+
+    const linkByUrl = await LinkRepository.findByUrlAndUserId(url, userId);
+    if (linkByUrl && linkByUrl.id !== id) {
+      return response.status(400).json({ error: 'This url already in use' });
+    }
+
+    const updatedLink = await LinkRepository.update(id, {
+      title, url, category_id,
+    });
+
+    response.json(updatedLink);
+  }
 }
 
 module.exports = new LinkController();
