@@ -97,6 +97,25 @@ class LinkController {
 
     response.json(updatedLink);
   }
+
+  async delete(request, response) {
+    const { userId } = request;
+    const { id } = request.params;
+
+    const linkExists = await LinkRepository.findById(id);
+    if (!linkExists) {
+      return response.status(404).json({ error: 'Link not found' });
+    }
+    if (linkExists.user_id !== userId) {
+      return response.status(400).json({
+        error: 'This link belongs to another user',
+      });
+    }
+
+    await LinkRepository.delete(id);
+
+    response.sendStatus(204);
+  }
 }
 
 module.exports = new LinkController();

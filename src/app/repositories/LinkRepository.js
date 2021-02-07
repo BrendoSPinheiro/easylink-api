@@ -50,6 +50,15 @@ class LinkRepository {
 
     return row;
   }
+
+  async delete(id) {
+    const deleteOp = await db.query(`
+      DELETE FROM links
+      WHERE id = $1
+    `, [id]);
+
+    return deleteOp;
+  }
 }
 
 module.exports = new LinkRepository();
