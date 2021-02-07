@@ -25,5 +25,6 @@ router.get('/links', LinkController.index);
 router.get('/links/:id', LinkController.show);
 router.post('/links', LinkController.store);
 router.put('/links/:id', LinkController.update);
+router.delete('/links/:id', LinkController.delete);
 
 module.exports = router;
