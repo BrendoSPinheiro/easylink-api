@@ -1,6 +1,26 @@
 const db = require('../../database');
 
 class LinkRepository {
+  async findById(id) {
+    const [row] = await db.query(`
+      SELECT * FROM links
+      WHERE id = $1
+    `, [id]);
+
+    return row;
+  }
+
+  async findAllByUserId(userId, orderBy = 'ASC') {
+    const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+    const rows = await db.query(`
+      SELECT * FROM links
+      WHERE user_id = $1
+      ORDER BY title ${direction}
+    `, [userId]);
+
+    return rows;
+  }
+
   async findByUrlAndUserId(url, userId) {
     const [row] = await db.query(`
       SELECT * FROM links
@@ -16,6 +36,17 @@ class LinkRepository {
       VALUES($1, $2, $3, $4)
       RETURNING *
     `, [title, url, category_id, userId]);
+
+    return row;
+  }
+
+  async update(id, { title, url, category_id }) {
+    const [row] = await db.query(`
+      UPDATE links
+      SET title = $1, url = $2, category_id = $3
+      WHERE id = $4
+      RETURNING *
+    `, [title, url, category_id, id]);
 
     return row;
   }
