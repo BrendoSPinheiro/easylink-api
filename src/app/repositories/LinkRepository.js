@@ -15,9 +15,11 @@ class LinkRepository {
   async findAllByUserId(userId, orderBy = 'ASC') {
     const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
     const rows = await db.query(`
-      SELECT * FROM links
-      WHERE user_id = $1
-      ORDER BY title ${direction}
+      SELECT links.*, categories.name as category_name
+      FROM links
+      LEFT JOIN categories ON categories.id = links.category_id
+      WHERE links.user_id = $1
+      ORDER BY links.title ${direction}
     `, [userId]);
 
     return rows;
