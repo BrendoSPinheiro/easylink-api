@@ -3,8 +3,10 @@ const db = require('../../database');
 class LinkRepository {
   async findById(id) {
     const [row] = await db.query(`
-      SELECT * FROM links
-      WHERE id = $1
+      SELECT links.*, categories.name as category_name
+      FROM links
+      LEFT JOIN categories ON categories.id = links.category_id
+      WHERE links.id = $1
     `, [id]);
 
     return row;
